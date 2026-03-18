@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>NearPlate &mdash; Food &amp; Parking Finder</title>
+  <script type="text/javascript" nonce="8c279c817a024655a5f124298c1" src="//local.adguard.org?ts=1773854548729&amp;type=content-script&amp;dmn=ppl-ai-code-interpreter-files.s3.amazonaws.com&amp;url=https%3A%2F%2Fppl-ai-code-interpreter-files.s3.amazonaws.com%2Fweb%2Fdirect-files%2F660e5371799d1f5aae393ccc13b08d36%2F6f877d67-d71c-41dd-94e9-7f95d7de3bde%2F7e7a1c89.html%3Fresponse-content-disposition%3Dattachment%253B%2520filename%253Dnearplate_v6.html%253B%2520filename%252A%253DUTF-8%2527%2527nearplate_v6.html%26AWSAccessKeyId%3DASIA2F3EMEYETX7YUHB5%26Signature%3DLSv5w5OnsmEzhX0fwOhvpJX%252FZyE%253D%26x-amz-security-token%3DIQoJb3JpZ2luX2VjEEEaCXVzLWVhc3QtMSJHMEUCIBzkgQ7f6p7zbSBRE%252FLtWQeh6YQq2C2t9TrtvO4%252FlX%252FEAiEA6lXyxVxx8%252BmFvYMAZQTl2WyF0Lwj9aryeO7SFaw9aCcq8wQIChABGgw2OTk3NTMzMDk3MDUiDN0QRtu3h1ind86eNyrQBGCuTGDVEnk2G2qWA3i0zoSYATM6qasDDzaNV0x%252F3pXWBeKnCmrOdJAHmaatOVSqQ7Ro73JcD3ed1H9Tls635CazqAwCU1AbBF%252FbWNBfitABp%252FmqXkT4ShAeIGEhjdh2t6aPfZ6DU7Zucu22O5kiZUY76BM%252FwYP1n0XJLfS%252F9KkWO%252BFzVNZt1CywculnkbpFiiys%252F6mYFP3WqHrYqoCxXMBe%252F4xUBZdH2r5PkzV8mBiZpava9cezbBVwvghHADkDIR3NCZ20zEkcfLz1Cgf7XsEVqM4i3MYgpIwnrAnkM7tuo7CHUCH1PtVtZSkgofhzOSsCDnMKH5cXX6MWSn6KLSYiwmKsgIaDnbVD87M1W%252FoKoCbhhgqwVRCyUbFeEyB6xdwgZKMXZzP%252Bp8SaYzKYMgNsnPtqWCmeHAxkDtfskEkWkhutzgIHXYrkmk2lwWQpY99q8DCGVNRbpfB5bizmbLorVq5QgNDT7ypYEMUVTzb3YLoiqVzAI5ZuqLyNFO%252BOVMMRXzet9ewEAW2tImWmmQ4ACASkZydrj%252F5InCWaAzjl6dYs7cqJn%252FfOGgcpb7a45CVKlecmOv261G8t%252F2AKPZjYkH8Jaol7DR3zkaK%252BLklymcfIocq9xay8HMOC%252BcgCNdasXcVLUK0jyVOVaFeWAH7u7TjcVLIsRfOPjTbBnuxTQyfzZ%252FRwooxxBwbEla3hzuIC13rOEoWOOzbEDmJwOixn7furRyPZUaZwFdN4zeXVAY8Omh1%252BBV%252Bmt69EVxY7Tg7o3Nh%252F9Iy7lstp2olwFFcwt7TrzQY6mAFmVP63ER3YOxv%252BGb8QVYidtA5OiTS0p0CxykGXBR1xPtzUfX8gKpfB9rY6uuLvfSFMXOPR8JlicJUNxYJCjyURKm0hOTPVnSY6en1Gpqqb93KeRPaU2UBC5r8JuppuKTjge6iho2WCMOBPXxYnc1av8O%252FtqS2DpP6o358OIgKlGlxMDrzmaJXMvROsRLiBPMFQP25%252FLsK1pw%253D%253D%26Expires%3D1773855410&amp;app=ai.perplexity.comet&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="8c279c817a024655a5f124298c1" src="//local.adguard.org?ts=1773854548729&amp;name=AdGuard%20Extra&amp;type=user-script"></script><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── THEMES ── */
+    :root {
+      --bg:#0f0f13; --surface:#1a1a24; --surface2:#22222f; --border:#2e2e42;
+      --accent:#7c6ff7; --accent2:#f97b6b; --accent3:#4ecdc4;
+      --text:#f0f0f5; --muted:#8888aa; --hover:#2a2a3a;
+      --shadow:0 4px 24px rgba(0,0,0,0.45);
+      --header-bg:linear-gradient(135deg,#1e1b4b,#1a1a24);
+    }
+    [data-theme="light"] {
+      --bg:#f0f0f8; --surface:#ffffff; --surface2:#e8e8f4; --border:#d0d0e8;
+      --accent:#5b50d6; --accent2:#e05c48; --accent3:#2aaba2;
+      --text:#1a1a2e; --muted:#6a6a88; --hover:#dcdcf0;
+      --shadow:0 4px 24px rgba(0,0,0,0.1);
+      --header-bg:linear-gradient(135deg,#ededfa,#f5f5ff);
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family:'Inter',sans-serif;
+      background:var(--bg); color:var(--text);
+      display:flex; flex-direction:column;
+      overflow:hidden;
+      height:100dvh;
+      transition:background .25s,color .25s;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--header-bg);
+      border-bottom:1px solid var(--border);
+      flex-shrink:0; z-index:300;
+      transition:background .25s,border-color .25s;
+    }
+    /* Two explicit rows */
+    .hrow {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 20px;
+    }
+    .hrow1 { padding-bottom:0; }
+    .hrow2 { padding-top:8px; padding-bottom:12px; }
+
+    /* Logo */
+    .logo { display:flex; align-items:center; gap:9px; flex-shrink:0; }
+    .logo-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; }
+    .logo h1 { font-size:19px; font-weight:700; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; white-space:nowrap; }
+    .logo-sub { font-size:10px; color:var(--muted); display:block; -webkit-text-fill-color:var(--muted); margin-top:-3px; }
+
+    .hrow1-right { margin-left:auto; display:flex; gap:8px; }
+    .icon-btn {
+      width:40px; height:40px; border-radius:50%; border:1px solid var(--border);
+      background:var(--surface2); color:var(--muted); font-size:17px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background .2s,color .2s; flex-shrink:0;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .icon-btn:hover { background:var(--hover); color:var(--text); }
+
+    /* Search row */
+    .search-box {
+      flex:1; display:flex; align-items:center; min-width:0;
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:14px; padding:0 14px; gap:9px;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .search-box:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,111,247,.15); }
+    .search-box svg { color:var(--muted); flex-shrink:0; }
+    .search-box input {
+      flex:1; min-width:0; background:none; border:none;
+      color:var(--text); outline:none; padding:13px 0;
+      font-family:'Inter',sans-serif; font-size:15px;
+    }
+    .search-box input::placeholder { color:var(--muted); }
+
+    .radius-sel {
+      background:var(--surface2); border:1px solid var(--border); border-radius:12px;
+      color:var(--text); font-family:'Inter',sans-serif; font-size:13px;
+      padding:0 14px; height:48px; cursor:pointer; outline:none; flex-shrink:0;
+      transition:background .25s;
+    }
+    .btn-search {
+      background:linear-gradient(135deg,var(--accent),#5a4fd6);
+      border:none; border-radius:14px; color:#fff;
+      font-family:'Inter',sans-serif; font-size:14px; font-weight:600;
+      padding:0 22px; height:48px; cursor:pointer; white-space:nowrap;
+      transition:opacity .2s,transform .1s; display:flex; align-items:center; gap:7px;
+      flex-shrink:0; -webkit-tap-highlight-color:transparent;
+    }
+    .btn-search:hover { opacity:.88; } .btn-search:active { transform:scale(.97); }
+    .btn-search:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* ── MAIN AREA ── */
+    .main { flex:1; display:flex; overflow:hidden; position:relative; min-height:0; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width:400px; flex-shrink:0; display:flex; flex-direction:column;
+      background:var(--surface); border-right:1px solid var(--border);
+      overflow:hidden; transition:background .25s,border-color .25s;
+    }
+    .stab-wrap { padding:14px 16px 0; flex-shrink:0; }
+
+    .tabs { display:flex; gap:5px; background:var(--bg); padding:4px; border-radius:12px; margin-bottom:10px; }
+    .tab { flex:1; border:none; border-radius:9px; padding:9px 8px; cursor:pointer; font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--muted); background:transparent; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; -webkit-tap-highlight-color:transparent; }
+    .tab .badge { background:var(--border); border-radius:20px; padding:1px 7px; font-size:11px; color:var(--muted); }
+    .tab.active { background:var(--surface2); color:var(--text); }
+    .tab.active.food .badge { background:rgba(249,123,107,.25); color:var(--accent2); }
+    .tab.active.park .badge { background:rgba(78,205,196,.25); color:var(--accent3); }
+
+    .filter-row { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+    .chip { padding:5px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:'Inter',sans-serif; font-size:11px; font-weight:500; cursor:pointer; transition:all .18s; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+    .chip:hover { background:var(--hover); color:var(--text); }
+    .chip.active { background:rgba(78,205,196,.15); border-color:var(--accent3); color:var(--accent3); }
+
+    .sort-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .sort-row span { font-size:12px; color:var(--muted); }
+    .sort-sel { background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Inter',sans-serif; font-size:12px; padding:5px 9px; cursor:pointer; outline:none; }
+
+    .card-list { flex:1; overflow-y:auto; padding:0 12px 20px; -webkit-overflow-scrolling:touch; }
+    .card-list::-webkit-scrollbar { width:4px; }
+    .card-list::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+    /* ── PLACE CARD ── */
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:13px 13px 10px; margin-bottom:9px; cursor:pointer; transition:background .18s,border-color .18s,transform .15s; }
+    .card:hover { background:var(--hover); border-color:var(--accent); transform:translateY(-1px); }
+    .card:active { transform:scale(.99); }
+    .card.hi { border-color:var(--accent); background:rgba(124,111,247,.07); }
+    [data-theme="light"] .card.hi { background:rgba(91,80,214,.05); }
+
+    .card-top { display:flex; gap:11px; align-items:flex-start; }
+    .card-ico { width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0; }
+    .ico-food { background:rgba(249,123,107,.18); }
+    .ico-garage { background:rgba(78,205,196,.18); }
+    .ico-under { background:rgba(159,122,234,.18); }
+    .ico-lot { background:rgba(99,179,237,.18); }
+
+    .card-body { flex:1; min-width:0; }
+    .card-name { font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:3px; }
+    .card-meta { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .pill { font-size:11px; padding:2px 8px; border-radius:20px; font-weight:500; }
+    .p-food   { background:rgba(124,111,247,.18); color:var(--accent); }
+    .p-garage { background:rgba(78,205,196,.18);  color:var(--accent3); }
+    .p-under  { background:rgba(159,122,234,.18); color:#b794f4; }
+    .p-lot    { background:rgba(99,179,237,.18);  color:#63b3ed; }
+    .card-dist { font-size:12px; color:var(--muted); }
+    .card-addr { font-size:12px; color:var(--muted); margin-top:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card-tags { display:flex; gap:5px; margin-top:7px; flex-wrap:wrap; }
+    .tag { font-size:10px; padding:2px 7px; border-radius:6px; background:var(--bg); color:var(--muted); border:1px solid var(--border); }
+
+    .card-actions { display:flex; gap:5px; margin-top:10px; padding-top:9px; border-top:1px solid var(--border); }
+    .act { flex:1; display:flex; align-items:center; justify-content:center; gap:4px; padding:8px 4px; border-radius:9px; border:1px solid var(--border); background:transparent; color:var(--muted); font-family:'Inter',sans-serif; font-size:11px; font-weight:500; cursor:pointer; text-decoration:none; transition:all .18s; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+    .act:active { transform:scale(.95); }
+    .act.gm:hover { background:rgba(66,133,244,.15); border-color:#4285f4; color:#4285f4; }
+    .act.am:hover { background:rgba(255,59,48,.15);  border-color:#ff3b30; color:#ff3b30; }
+    .act.cp:hover { background:rgba(78,205,196,.15); border-color:var(--accent3); color:var(--accent3); }
+    .act.cp.done  { background:rgba(52,211,153,.18); border-color:#34d399; color:#34d399; }
+
+    /* ── EMPTY / LOADING STATES ── */
+    .empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:230px; gap:12px; padding:20px; text-align:center; color:var(--muted); }
+    .empty .ei { font-size:44px; opacity:.4; }
+    .empty h3 { font-size:15px; font-weight:600; color:var(--text); }
+    .empty p { font-size:13px; line-height:1.6; }
+    .spin { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:rot .75s linear infinite; }
+    @keyframes rot { to { transform:rotate(360deg); } }
+
+    /* ── MAP ── */
+    #map { flex:1; z-index:1; }
+
+    /* ── MAP PILL (mobile only, JS-controlled) ── */
+    .map-pill {
+      display:none; /* shown only by JS on mobile after search */
+      position:absolute; top:14px; left:50%; transform:translateX(-50%);
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:50px; padding:7px 18px; font-size:13px; font-weight:500;
+      color:var(--text); box-shadow:var(--shadow); z-index:50; pointer-events:none;
+      white-space:nowrap;
+    }
+
+    /* ── POPUP ── */
+    .leaflet-popup-content-wrapper { background:var(--surface2) !important; border:1px solid var(--border) !important; color:var(--text) !important; border-radius:12px !important; box-shadow:var(--shadow) !important; font-family:'Inter',sans-serif !important; }
+    .leaflet-popup-tip { background:var(--surface2) !important; }
+    .pu { padding:3px 0; }
+    .pu h4 { font-size:14px; font-weight:600; color:var(--text); margin-bottom:3px; }
+    .pu p  { font-size:12px; color:var(--muted); margin:2px 0; }
+    .pu .pt { font-size:11px; padding:2px 8px; border-radius:20px; display:inline-block; margin-top:5px; }
+    .pu .pn { display:flex; gap:6px; margin-top:8px; }
+    .pu .pn a { flex:1; text-align:center; padding:6px; border-radius:7px; font-size:11px; font-weight:600; text-decoration:none; border:1px solid var(--border); color:var(--muted); }
+    .pu .pn a.gm { background:rgba(66,133,244,.15); border-color:#4285f4; color:#4285f4; }
+    .pu .pn a.am { background:rgba(255,59,48,.15); border-color:#ff3b30; color:#ff3b30; }
+
+    /* ── TOAST ── */
+    /* Uses opacity+visibility so it's TRULY invisible when inactive — no layout/visual bleed */
+    #toast {
+      position:fixed; bottom:84px; left:50%; transform:translateX(-50%) translateY(10px);
+      background:var(--surface2); border:1px solid var(--border); border-radius:50px;
+      padding:10px 20px; font-size:13px; color:var(--text); box-shadow:var(--shadow);
+      z-index:9999; white-space:nowrap; pointer-events:none;
+      opacity:0; visibility:hidden;
+      transition:opacity .3s, visibility .3s, transform .3s cubic-bezier(.34,1.56,.64,1), background .25s;
+    }
+    #toast.show { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+
+    /* ── MOBILE BOTTOM NAV ── */
+    .mob-nav {
+      display:none; position:fixed; bottom:0; left:0; right:0;
+      background:var(--surface); border-top:1px solid var(--border);
+      z-index:400; padding:6px 20px calc(6px + env(safe-area-inset-bottom));
+      gap:8px; transition:background .25s,border-color .25s;
+    }
+    .mob-btn {
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+      border:none; background:transparent; color:var(--muted);
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:500;
+      cursor:pointer; padding:6px 0; border-radius:10px;
+      transition:color .2s; -webkit-tap-highlight-color:transparent;
+    }
+    .mob-btn .mico { font-size:21px; }
+    .mob-btn.active { color:var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:700px) {
+      /* Body accounts for bottom nav */
+      body { height:100svh; padding-bottom:calc(58px + env(safe-area-inset-bottom)); }
+
+      /* Header: tighten padding */
+      .hrow { padding:9px 14px; }
+      .hrow1 { padding-bottom:0; }
+      .hrow2 { padding-top:6px; padding-bottom:10px; }
+      /* Hide desktop-only elements */
+      .logo-sub { display:none; }
+      .radius-sel { display:none; }
+      /* Search input: 16px prevents iOS Safari auto-zoom */
+      .search-box input { font-size:16px; }
+      /* Taller search box for better touch target */
+      .search-box { border-radius:12px; height:48px; }
+      /* Icon-only search button on mobile (saves ~70px of width for the input) */
+      .btn-search { width:48px; min-width:48px; padding:0; border-radius:12px; justify-content:center; }
+      .btn-label { display:none; }
+
+      /* Main: layered full-screen panels */
+      .main { flex-direction:column; }
+      .sidebar {
+        position:absolute; inset:0; width:100%; border-right:none;
+        display:none; z-index:10;
+      }
+      .sidebar.mon { display:flex; }
+      #map { position:absolute; inset:0; display:none; }
+      #map.mon { display:block; }
+
+      /* Show mobile nav */
+      .mob-nav { display:flex; }
+
+      /* Toast sits above the nav bar */
+      #toast { bottom:calc(66px + env(safe-area-inset-bottom)); }
+
+      /* Slightly more breathing room on cards */
+      .card { padding:12px 11px 9px; }
+      .act { padding:9px 3px; font-size:10.5px; }
+    }
+
+    /* Desktop: always show sidebar + map */
+    @media (min-width:701px) {
+      .sidebar { display:flex !important; }
+      #map { display:block !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <!-- Row 1: logo + controls -->
+  <div class="hrow hrow1">
+    <div class="logo">
+      <div class="logo-icon">&#127869;</div>
+      <div>
+        <h1>NearPlate</h1>
+        <span class="logo-sub">Food &amp; Parking Explorer</span>
+      </div>
+    </div>
+    <div class="hrow1-right">
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">&#9790;</button>
+      <button class="icon-btn" id="locateBtn" title="Use my location">&#128205;</button>
+    </div>
+  </div>
+  <!-- Row 2: search -->
+  <div class="hrow hrow2">
+    <div class="search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="addr" type="text" placeholder="Enter an address, city, or landmark&#8230;" autocomplete="off"/>
+    </div>
+    <select class="radius-sel" id="rad">
+      <option value="500">0.3 mi</option>
+      <option value="1609" selected>1 mi</option>
+      <option value="3219">2 mi</option>
+      <option value="8047">5 mi</option>
+    </select>
+    <button class="btn-search" id="searchBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span class="btn-label">Search</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="main">
+
+  <!-- Sidebar -->
+  <div class="sidebar mon" id="sidebar">
+    <div class="stab-wrap">
+      <div class="tabs">
+        <button class="tab food active" id="tFood" onclick="switchTab('food')">&#127836; Restaurants <span class="badge" id="bFood">0</span></button>
+        <button class="tab park"        id="tPark" onclick="switchTab('parking')">&#127359; Parking <span class="badge" id="bPark">0</span></button>
+      </div>
+      <div id="pFilters" class="filter-row" style="display:none">
+        <button class="chip active" data-f="all"         onclick="setFilter(this,'all')">&#9898; All</button>
+        <button class="chip"        data-f="garage"      onclick="setFilter(this,'garage')">&#127970; Garages</button>
+        <button class="chip"        data-f="lot"         onclick="setFilter(this,'lot')">&#127359; Lots</button>
+        <button class="chip"        data-f="underground" onclick="setFilter(this,'underground')">&#11015; Underground</button>
+      </div>
+      <div class="sort-row">
+        <span id="rCount">No results yet</span>
+        <select class="sort-sel" id="sortBy" onchange="render()">
+          <option value="dist">Nearest first</option>
+          <option value="name">A &#8594; Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-list" id="cList">
+      <div class="empty"><div class="ei">&#128506;</div><h3>Start Exploring</h3><p>Enter an address above to discover nearby restaurants and parking spots.</p></div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+  <!-- Floating result pill on map (mobile, JS-only) -->
+  <div class="map-pill" id="mapPill"></div>
+</div>
+
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<div class="mob-nav">
+  <button class="mob-btn active" id="mnList" onclick="setMV('list')"><span class="mico">&#128203;</span><span>List</span></button>
+  <button class="mob-btn"        id="mnMap"  onclick="setMV('map')"> <span class="mico">&#128506;</span><span>Map</span></button>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div id="toast"></div>
+
+<script>
+/* ── THEME ── */
+var _theme = localStorage.getItem('np-theme') || 'dark';
+setTheme(_theme);
+
+function setTheme(t) {
+  _theme = t;
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('themeBtn');
+  if (btn) { btn.innerHTML = t === 'dark' ? '&#9728;' : '&#9790;'; btn.title = t === 'dark' ? 'Switch to Light' : 'Switch to Dark'; }
+  if (window._tl) window._tl.setUrl(tileUrl(t));
+}
+function toggleTheme() { var n = _theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('np-theme', n); setTheme(n); }
+function tileUrl(t) { return t === 'light' ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'; }
+
+/* ── MAP ── */
+var map = L.map('map', { zoomControl:false }).setView([36.045,-114.98], 13);
+var _tl = L.tileLayer(tileUrl(_theme), { attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19 }).addTo(map);
+window._tl = _tl;
+L.control.zoom({ position:'bottomright' }).addTo(map);
+
+window.addEventListener('resize', function() {
+  clearTimeout(window._rt);
+  window._rt = setTimeout(function() { map.invalidateSize(); }, 150);
+});
+
+function mkIcon(e, c) {
+  return L.divIcon({ className:'', iconSize:[34,34], iconAnchor:[17,34], popupAnchor:[0,-36],
+    html:'<div style="background:'+c+';width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)"><span style="transform:rotate(45deg);font-size:15px">'+e+'</span></div>'
+  });
+}
+var ICONS = {
+  food:    mkIcon('&#127860;','#f97b6b'),
+  garage:  mkIcon('&#127970;','#4ecdc4'),
+  lot:     mkIcon('P','#63b3ed'),
+  under:   mkIcon('&#11015;','#9f7aea'),
+  home:    mkIcon('&#128205;','#7c6ff7')
+};
+
+/* ── STATE ── */
+var foods=[], parks=[], curTab='food', curFilter='all', hiId=null;
+var mkrs={ food:[], park:[] };
+var centerMkr=null;
+
+/* ── MOBILE VIEW ── */
+var mv = 'list';
+function setMV(v) {
+  mv = v;
+  var sb=document.getElementById('sidebar'), mp=document.getElementById('map'), pill=document.getElementById('mapPill');
+  var nl=document.getElementById('mnList'), nm=document.getElementById('mnMap');
+  if (v==='list') {
+    sb.classList.add('mon'); mp.classList.remove('mon');
+    nl.classList.add('active'); nm.classList.remove('active');
+    pill.style.display = 'none';
+  } else {
+    sb.classList.remove('mon'); mp.classList.add('mon');
+    nm.classList.add('active'); nl.classList.remove('active');
+    if (pill._ready) pill.style.display = 'block';
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ map.invalidateSize(); }); });
+  }
+}
+
+/* ── SEARCH ── */
+document.getElementById('searchBtn').addEventListener('click', doSearch);
+document.getElementById('addr').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
+document.getElementById('locateBtn').addEventListener('click', function() {
+  if (!navigator.geolocation) { toast('Geolocation not supported'); return; }
+  loading(true);
+  navigator.geolocation.getCurrentPosition(
+    function(p){ fly(p.coords.latitude, p.coords.longitude, 'Your Location'); },
+    function(){ toast('Location access denied'); loading(false); }
+  );
+});
+
+function doSearch() {
+  var q = document.getElementById('addr').value.trim();
+  if (!q) { toast('Please enter an address first'); return; }
+  loading(true);
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q), { headers:{'Accept-Language':'en'} })
+    .then(function(r){ return r.json(); })
+    .then(function(g){
+      if (!g.length) { toast('Address not found. Try again.'); loading(false); return; }
+      fly(parseFloat(g[0].lat), parseFloat(g[0].lon), g[0].display_name);
+    })
+    .catch(function(){ toast('Network error. Check connection.'); loading(false); });
+}
+
+function fly(lat, lon, label) {
+  if (window.innerWidth <= 700) {
+    setMV('map');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      map.invalidateSize({ animate:false });
+      doFly(lat, lon, label);
+    }); });
+  } else {
+    doFly(lat, lon, label);
+  }
+}
+
+function doFly(lat, lon, label) {
+  if (centerMkr) map.removeLayer(centerMkr);
+  centerMkr = L.marker([lat,lon],{icon:ICONS.home}).addTo(map)
+    .bindPopup('<div class="pu"><h4>&#128205; '+label.split(',')[0]+'</h4><p>Search center</p></div>');
+  map.flyTo([lat,lon], 15, {duration:1.2});
+  fetchPOIs(lat, lon);
+}
+
+/* ── OVERPASS ── */
+function fetchPOIs(lat, lon) {
+  var r = parseInt(document.getElementById('rad').value);
+  var q = '[out:json][timeout:25];('
+    +'node["amenity"~"^(restaurant|cafe|fast_food|bar|pub|food_court|bakery|ice_cream|biergarten)$"](around:'+r+','+lat+','+lon+');'
+    +'node["amenity"="parking"]["access"!="private"]["access"!="customers"]["access"!="no"](around:'+r+','+lat+','+lon+');'
+    +'way["amenity"="parking"]["access"!="private"]["access"!="customers"]["access"!="no"](around:'+r+','+lat+','+lon+');'
+    +');out center tags;';
+  fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q)})
+    .then(function(r){ return r.json(); })
+    .then(function(res){ clearMkrs(); process(res.elements,lat,lon); loading(false); })
+    .catch(function(){ toast('Could not load data. Try again.'); loading(false); });
+}
+
+function classifyPark(tags) {
+  var pt=(tags&&tags['parking']?tags['parking'].toLowerCase():'');
+  var ac=(tags&&tags['access']?tags['access'].toLowerCase():'');
+  if (ac==='private'||ac==='customers'||ac==='no') return null;
+  if (pt==='multi-storey'||pt==='multi_storey'||pt==='rooftop') return 'garage';
+  if (pt==='underground') return 'underground';
+  if (pt==='surface'||pt===''||pt==='yes') return 'lot';
+  return null;
+}
+
+function process(els, clat, clon) {
+  foods=[]; parks=[]; hiId=null;
+  els.forEach(function(el){
+    var la=el.lat!=null?el.lat:(el.center?el.center.lat:null);
+    var lo=el.lon!=null?el.lon:(el.center?el.center.lon:null);
+    if(la==null||lo==null) return;
+    var t=el.tags||{}, am=t['amenity']||'', dist=haversine(clat,clon,la,lo);
+    var name=t['name']||t['name:en']||'', addr=mkAddr(t);
+    var item={id:el.id,lat:la,lon:lo,name:name,am:am,addr:addr,dist:dist,tags:t};
+
+    if (am==='parking') {
+      var pc=classifyPark(t); if(!pc) return;
+      item.pc=pc; if(!item.name) item.name=dfltPark(pc);
+      parks.push(item);
+      var ico=pc==='garage'?ICONS.garage:pc==='underground'?ICONS.under:ICONS.lot;
+      var m=L.marker([la,lo],{icon:ico}).addTo(map);
+      m.bindPopup(mkPopup(item,'park'));
+      m.on('click',(function(id){ return function(){ focusCard(id,'parking'); }; })(item.id));
+      mkrs.park.push({id:item.id,m:m});
+    } else {
+      if(!item.name) item.name=fmtAm(am);
+      foods.push(item);
+      var mf=L.marker([la,lo],{icon:ICONS.food}).addTo(map);
+      mf.bindPopup(mkPopup(item,'food'));
+      mf.on('click',(function(id){ return function(){ focusCard(id,'food'); }; })(item.id));
+      mkrs.food.push({id:item.id,m:mf});
+    }
+  });
+
+  document.getElementById('bFood').textContent=foods.length;
+  document.getElementById('bPark').textContent=parks.length;
+
+  var total=foods.length+parks.length;
+  var pill=document.getElementById('mapPill');
+  pill.textContent=total+' place'+(total!==1?'s':'')+' found nearby';
+  pill._ready=true;
+  if (mv==='map' && window.innerWidth<=700) pill.style.display='block';
+
+  render();
+  toast('Found '+foods.length+' restaurants & '+parks.length+' parking areas');
+}
+
+function dfltPark(p){ return {garage:'Parking Garage',underground:'Underground Garage',lot:'Public Parking Lot'}[p]||'Public Parking'; }
+function mkAddr(t){ return [t['addr:housenumber'],t['addr:street'],t['addr:city']].filter(Boolean).join(' '); }
+function gmUrl(la,lo,n){ return 'https://www.google.com/maps/dir/?api=1&destination='+la+','+lo+'&destination_place_id='+encodeURIComponent(n); }
+function amUrl(la,lo,n){ return 'https://maps.apple.com/?daddr='+la+','+lo+'&q='+encodeURIComponent(n); }
+
+function mkPopup(item,type){
+  var isF=type==='food';
+  var col=isF?'#f97b6b':(item.pc==='garage'?'#4ecdc4':item.pc==='underground'?'#9f7aea':'#63b3ed');
+  var lbl=isF?fmtAm(item.am):parkLbl(item.pc);
+  return '<div class="pu">'
+    +'<h4>'+item.name+'</h4>'
+    +(item.addr?'<p>&#128205; '+item.addr+'</p>':'')
+    +'<p>&#128207; '+fmtDist(item.dist)+' away</p>'
+    +'<span class="pt" style="background:'+col+'22;color:'+col+'">'+lbl+'</span>'
+    +'<div class="pn">'
+    +'<a class="gm" href="'+gmUrl(item.lat,item.lon,item.name)+'" target="_blank">&#128506; Google</a>'
+    +'<a class="am" href="'+amUrl(item.lat,item.lon,item.name)+'" target="_blank">&#127758; Apple</a>'
+    +'</div></div>';
+}
+
+/* ── FILTER CHIPS ── */
+function setFilter(btn,val){
+  curFilter=val;
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active');});
+  btn.classList.add('active'); render();
+}
+
+/* ── RENDER ── */
+function render(){
+  var isP=curTab==='parking', data=isP?parks.slice():foods.slice();
+  document.getElementById('pFilters').style.display=isP?'flex':'none';
+  if(isP&&curFilter!=='all') data=data.filter(function(x){return x.pc===curFilter;});
+  var s=document.getElementById('sortBy').value;
+  if(s==='name') data.sort(function(a,b){return a.name.localeCompare(b.name);});
+  else data.sort(function(a,b){return a.dist-b.dist;});
+
+  document.getElementById('rCount').textContent=data.length+' result'+(data.length!==1?'s':'');
+  var el=document.getElementById('cList');
+  if(!data.length){
+    el.innerHTML='<div class="empty"><div class="ei">'+(isP?'&#127359;':'&#127869;')+'</div><h3>No results found</h3><p>Try a larger radius or a different filter.</p></div>';
+    return;
+  }
+  el.innerHTML=data.map(mkCard).join('');
+
+  el.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('click',function(e){
+      if(e.target.closest('.act')) return;
+      var id=parseInt(card.dataset.id);
+      var item=data.find(function(x){return x.id===id;});
+      if(!item) return;
+      if(window.innerWidth<=700) setMV('map');
+      map.flyTo([item.lat,item.lon],17,{duration:.8});
+      var arr=curTab==='food'?mkrs.food:mkrs.park;
+      var mo=arr.find(function(x){return x.id===id;});
+      if(mo) mo.m.openPopup();
+      focusCard(id,curTab);
+    });
+  });
+
+  el.querySelectorAll('.act.cp').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      navigator.clipboard.writeText(btn.dataset.cp).then(function(){
+        btn.classList.add('done'); btn.innerHTML='&#10003; Copied!';
+        setTimeout(function(){ btn.classList.remove('done'); btn.innerHTML='&#128203; Copy'; },2000);
+        toast('Address copied!');
+      }).catch(function(){ toast('Clipboard access denied'); });
+    });
+  });
+}
+
+function mkCard(item){
+  var isF=item.am!=='parking', pc=item.pc||'';
+  var icoC=isF?'ico-food':(pc==='garage'?'ico-garage':pc==='underground'?'ico-under':'ico-lot');
+  var ico=isF?amEmo(item.am):pkEmo(pc);
+  var lbl=isF?fmtAm(item.am):parkLbl(pc);
+  var pc2=isF?'p-food':(pc==='garage'?'p-garage':pc==='underground'?'p-under':'p-lot');
+  var t=item.tags, xt=[];
+  if(t['cuisine']) t['cuisine'].split(';').slice(0,2).forEach(function(c){xt.push(c.trim().replace(/_/g,' '));});
+  if(t['capacity']) xt.push(t['capacity']+' spots');
+  if(t['building:levels']||t['levels']) xt.push((t['building:levels']||t['levels'])+' levels');
+  if(t['fee']==='no') xt.push('Free'); else if(t['fee']==='yes') xt.push('Paid');
+  if(t['covered']==='yes'&&pc==='lot') xt.push('Covered');
+  var cp=(item.addr||item.name+' — '+item.lat.toFixed(5)+', '+item.lon.toFixed(5)).replace(/"/g,'&quot;');
+  return '<div class="card'+(hiId===item.id?' hi':'')+'" data-id="'+item.id+'">'
+    +'<div class="card-top"><div class="card-ico '+icoC+'">'+ico+'</div>'
+    +'<div class="card-body"><div class="card-name">'+item.name+'</div>'
+    +'<div class="card-meta"><span class="pill '+pc2+'">'+lbl+'</span><span class="card-dist">&#128207; '+fmtDist(item.dist)+'</span></div>'
+    +(item.addr?'<div class="card-addr">&#128205; '+item.addr+'</div>':'')
+    +'</div></div>'
+    +(xt.length?'<div class="card-tags">'+xt.map(function(x){return '<span class="tag">'+x+'</span>';}).join('')+'</div>':'')
+    +'<div class="card-actions">'
+    +'<a class="act gm" href="'+gmUrl(item.lat,item.lon,item.name)+'" target="_blank" onclick="event.stopPropagation()">&#128506; Google</a>'
+    +'<a class="act am" href="'+amUrl(item.lat,item.lon,item.name)+'" target="_blank" onclick="event.stopPropagation()">&#127758; Apple</a>'
+    +'<button class="act cp" data-cp="'+cp+'">&#128203; Copy</button>'
+    +'</div></div>';
+}
+
+function focusCard(id,tab){
+  if(curTab!==tab) switchTab(tab);
+  hiId=id; render();
+  var c=document.querySelector('.card[data-id="'+id+'"]');
+  if(c) c.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function switchTab(tab){
+  curTab=tab; hiId=null; curFilter='all';
+  document.getElementById('tFood').className='tab food'+(tab==='food'?' active':'');
+  document.getElementById('tPark').className='tab park'+(tab==='parking'?' active':'');
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('active',c.dataset.f==='all');});
+  render();
+}
+
+/* ── HELPERS ── */
+function haversine(a,b,c,d){var R=6371000,x=(c-a)*Math.PI/180,y=(d-b)*Math.PI/180,z=Math.sin(x/2)*Math.sin(x/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(y/2)*Math.sin(y/2);return R*2*Math.atan2(Math.sqrt(z),Math.sqrt(1-z));}
+function fmtDist(m){var mi=m/1609.344;return mi<.1?Math.round(m*3.28084)+' ft':mi.toFixed(1)+' mi';}
+function fmtAm(a){return {restaurant:'Restaurant',cafe:'Café',fast_food:'Fast Food',bar:'Bar',pub:'Pub',food_court:'Food Court',bakery:'Bakery',ice_cream:'Ice Cream',biergarten:'Beer Garden'}[a]||a.replace(/_/g,' ');}
+function amEmo(a){return {restaurant:'&#127869;',cafe:'&#9749;',fast_food:'&#127828;',bar:'&#127864;',pub:'&#127866;',food_court:'&#129361;',bakery:'&#129360;',ice_cream:'&#127846;',biergarten:'&#127867;'}[a]||'&#127860;';}
+function parkLbl(p){return {garage:'Parking Garage',underground:'Underground Garage',lot:'Public Lot'}[p]||'Public Parking';}
+function pkEmo(p){return {garage:'&#127970;',underground:'&#11015;',lot:'P'}[p]||'P';}
+function clearMkrs(){['food','park'].forEach(function(k){mkrs[k].forEach(function(o){map.removeLayer(o.m);});mkrs[k]=[];});}
+
+function loading(on){
+  var btn=document.getElementById('searchBtn'), cl=document.getElementById('cList');
+  btn.disabled=on;
+  btn.innerHTML=on?'<div class="spin" style="width:16px;height:16px;border-width:2px;flex-shrink:0"></div>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="btn-label">Search</span>';
+  if(on) cl.innerHTML='<div class="empty"><div class="spin"></div><h3>Searching&#8230;</h3><p>Fetching places nearby</p></div>';
+}
+
+var _tt;
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(function(){t.classList.remove('show');},3200);
+}
+</script>
+</body>
+</html>
